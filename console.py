@@ -1,8 +1,22 @@
+#!/usr/bin/env python3
+from models.base_model import BaseModel
 import cmd
-from models import storage
+
 
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
+
+    def do_quit(self, arg):
+        """Quit command to exit the commandline"""
+        return True
+
+    def do_EOF(self, arg):
+        """Handles CTRL+D signal"""
+        return True
+    
+    def emptyline(self):
+        """An empty commandline + ENTER shouldn’t execute anything"""
+        pass
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel, saves it, and prints the id."""
@@ -15,6 +29,22 @@ class HBNBCommand(cmd.Cmd):
             new_obj = storage.classes[args[0]]()
             storage.save()
             print(new_obj.id)
+
+    def do_show(self, arg):
+        """Prints the string representation of an instance based on the class name and id."""
+        args = arg.split()
+        if len(args) == 0:
+            print("** class name missing **")
+        elif args[0] not in storage.classes:
+            print("** class doesn't exist **")
+        elif len(args) == 1:
+            print("** instance id missing **")
+        else:
+            try:
+                obj = storage.get(args[0], args[1])
+                print(obj)
+            except KeyError:
+                print("** no instance found **")
 
 
     # ... implementation for do_show (provided earlier) ...
@@ -66,6 +96,9 @@ class HBNBCommand(cmd.Cmd):
                 storage.save()
             except KeyError:
                 print("** no instance found **")
+
+    pass
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

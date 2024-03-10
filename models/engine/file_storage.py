@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 import json
 import os
-from models.base_model import BaseModel
+from models.user import User 
+from models import get_storage
+
 
 class FileStorage:
     """
@@ -16,21 +18,16 @@ class FileStorage:
     pass
 
     def new(self, obj):
-        self.__objects[obj.__class__.__name__ + "." + obj.id] = obj
-    pass
-
-    def save(self):
-        new = {key: value for key, value in self.__objects.items()}
-
-        with open(self.__file_path, "w") as f:
-            json.dump(new, f)
-    pass
-
+        FileStorage.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
     def reload(self):
-
-        try:
-            with open(self.__file_path, "r") as fileread:
-                self.__objects.update(json.load(fileread))
-        except Exception:
-            pass
+        from models import storage
+        storage = get_storage()
+        
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, 'r') as f:
+                objs = json.load(f)
+            for k, v in objs.items():
+                cls = v['__class__']
+                if cls in storage.classes:
+                    self.__objects[k] = storage.classes[cls](**v)
 
