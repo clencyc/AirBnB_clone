@@ -3,13 +3,14 @@
 import uuid
 import models
 from datetime import datetime
-import models
+from models.engine.file_storage import FileStorage
+from models.storage_instance import storage
+from models.engine import file_storage
 
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
-        from models.engine.file_storage import FileStorage
-        from models.engine import file_storage
+        storage = FileStorage.get_instance()
 
         file_storage.new(self)
         if kwargs:

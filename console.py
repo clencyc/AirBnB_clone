@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 from models.base_model import BaseModel
 import cmd
+from models.engine.file_storage import FileStorage
+from models.storage_instance import storage
+
 
 
 class HBNBCommand(cmd.Cmd):
@@ -21,21 +24,20 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Creates a new instance of BaseModel, saves it, and prints the id."""
         args = arg.split()
-        if len(args) == 0:
-            print("** class name missing **")
-        elif args[0] not in storage.classes:  # Change to correct attribute
-            print("** class doesn't exist **")
-        else:
-            new_obj = storage.classes[args[0]]()
-            storage.save()
-            print(new_obj.id)
+        for key in storage:
+            class_create = key.split('.')[0]
+            if class_create == args[0]:
+                new_instance = storage[key]()
+                print(new_instance.id)
+                new_instance.save()
+                return
 
     def do_show(self, arg):
         """Prints the string representation of an instance based on the class name and id."""
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
-        elif args[0] not in storage.classes:
+        elif args[0] not in storage.all():
             print("** class doesn't exist **")
         elif len(args) == 1:
             print("** instance id missing **")
@@ -66,7 +68,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             for obj in storage.all().values():
                 print(obj)
-        elif args[0] in storage.classes:
+        elif args[0] in storage.all():
             for obj in storage.all(args[0]).values():
                 print(obj)
         else:
