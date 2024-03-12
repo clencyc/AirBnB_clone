@@ -18,6 +18,11 @@ class FileStorage:
         self._data = []
         self._index = 0
 
+    def save(self):
+        with open(self.__file_path, 'w') as f:
+            objs = {k: v.to_dict() for k, v in self.__objects.items()}
+            json.dump(objs, f)
+
     def __iter__(self):
         return self
 
@@ -45,9 +50,7 @@ class FileStorage:
         from models.user import User
         from models import BaseModel
         from models.base_model import BaseModel
-        from models import get_storage
         from models import storage
-        storage = get_storage()
         
         if os.path.exists(self.__file_path):
             with open(self.__file_path, 'r') as f:

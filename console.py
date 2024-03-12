@@ -2,7 +2,7 @@
 from models.base_model import BaseModel
 import cmd
 from models.engine.file_storage import FileStorage
-from models.storage_instance import storage
+from models import storage
 
 
 
@@ -22,15 +22,19 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
+
+        model = {"BaseModel":BaseModel}
         """Creates a new instance of BaseModel, saves it, and prints the id."""
-        args = arg.split()
-        for key in storage:
-            class_create = key.split('.')[0]
-            if class_create == args[0]:
-                new_instance = storage[key]()
-                print(new_instance.id)
-                new_instance.save()
-                return
+        if not arg:
+            print("** class name missing **")
+        elif arg not in model:
+            print("** class doesn't exist **")
+        else:
+            new_instance = model[arg]()
+            new_instance.save()
+            print(new_instance.id)
+
+        
 
     def do_show(self, arg):
         """Prints the string representation of an instance based on the class name and id."""
