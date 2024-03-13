@@ -48,15 +48,15 @@ class FileStorage:
         FileStorage.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
     def reload(self):
         from models.user import User
-        from models import BaseModel
         from models.base_model import BaseModel
         from models import storage
         
-        if os.path.exists(self.__file_path):
-            with open(self.__file_path, 'r') as f:
-                objs = json.load(f)
-            for k, v in objs.items():
-                cls = v['__class__']
-                if cls in storage.classes:
-                    self.__objects[k] = storage.classes[cls](**v)
+        if os.path.getsize(self.__file_path) > 0:
+            with open(self.__file_path, "r") as f:
+                try:
+                    objs = json.load(f)
+                except json.JSONDecodeError:
+                    print("JSON file is not properly formatted")
+        else:
+            print("JSON file is empty")
 
