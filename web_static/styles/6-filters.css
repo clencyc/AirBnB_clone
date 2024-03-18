@@ -12,6 +12,7 @@
     height: 100%;
     width: 25%;
     float: left;
+    position: relative;
 }
 
 .filters .locations {
@@ -20,20 +21,11 @@
     display: inline-block;
 }
 
-
-.filters.locations-content {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #FAFAFA;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-    list-style: none;
-    padding: 10px;
-    display: none;
+.filters .amenities {
+    border-right: 1px solid #DDDDDD;
+    position: relative;
+    display: inline-block;
 }
-
 .filters.locations-content li:hover {
     background-color: #FF5A5F;
     color: #FFFFFF;
@@ -88,12 +80,15 @@
 }
 
 
+.filters .popover li:hover {
+    background-color: gray;
+    display: block;
+}
 .filters .popover {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    width: 80%;
     background-color: #FAFAFA;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
@@ -101,16 +96,29 @@
     padding: 10px;
 }
 
-
-
-.filters ul {
-    font-size: 20px;
+.filters div:hover .popover {
+    display: block;
 }
 
 .filters .popover h2 {
-    font-size: 16px;
+    font-size: 10px;
 }
 
-.filters div:hover .popover {
+.filters .popover p {
+    font-size: 15px;
+    font-weight: lighter;
+}
+
+.filters .amenities .popover {
+    display: none;
+    position: absolute;
+    width: 80%;
+    background-color: #FAFAFA;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    list-style: none;
+}
+
+.filters .amenities div:hover .popover {
     display: block;
 }
